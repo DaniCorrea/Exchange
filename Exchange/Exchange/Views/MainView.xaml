@@ -11,7 +11,7 @@
             Android="5"/>
         </ContentPage.Padding>
         <ContentPage.Content>
-        <StackLayout BackgroundColor="#FFCB83">
+        <StackLayout BackgroundColor="DimGray">
             <Label 
                     FontAttributes="Bold"
                     FontSize="Large"
@@ -19,52 +19,123 @@
                     Text="Foreign Exchange"
                     TextColor="White">
             </Label>
-            <Label  
-                FontAttributes="Bold" 
-                Text="Amount:"
-                TextColor="White">
-            </Label>
-            <Entry
-                Text="{Binding Amount, Mode=TwoWay}"
-                Placeholder="Enter an amount to convert...">
-            </Entry>
-            <Label 
-                FontAttributes="Bold"
-                Text="Source Rate:"
-                TextColor="White">
-            </Label>
-            <Picker
-                ItemDisplayBinding="{Binding Name}"
-                ItemsSource="{Binding Rates}"
-                SelectedItem="{Binding SourceRate, Mode=TwoWay}"
-                Title="Select a source rate...">
-            </Picker>
-            <Label 
-                FontAttributes="Bold"
-                Text="Target Rate:"
-                TextColor="White">
-            </Label>
-            <Picker
-                ItemDisplayBinding="{Binding Name}"
-                ItemsSource="{Binding Rates}"
-                SelectedItem="{Binding TargetRate, Mode=TwoWay}"
-                Title="Select a target rate...">
-            </Picker>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=".5*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width=".5*"/>
+                </Grid.ColumnDefinitions>
+                <Label  
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Text="Amount:"
+                    TextColor="White">
+                </Label>
+                <Entry
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Text="{Binding Amount, Mode=TwoWay}"
+                    Placeholder="Enter an amount to convert...">
+                </Entry>
+                <Label 
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Text="Source Rate:"
+                    TextColor="White">
+                </Label>
+                <Picker
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Rates}"
+                    SelectedItem="{Binding SourceRate, Mode=TwoWay}"
+                    Title="Select a source rate...">
+                </Picker>
+                <Label 
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Text="Target Rate:"
+                    TextColor="White">
+                </Label>
+                <Picker
+                    Grid.Column="1"
+                    Grid.Row="2"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding Rates}"
+                    SelectedItem="{Binding TargetRate, Mode=TwoWay}"
+                    Title="Select a target rate...">
+                </Picker>
+                <Image
+                    Grid.Column="2"
+                    Grid.Row="1"
+                    Grid.RowSpan="2"
+                    HeightRequest="30"
+                    Source="swap.png"
+                    WidthRequest="40">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SwitchCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+            </Grid>
+            
             <ActivityIndicator 
                 IsRunning="{Binding IsRunning, Mode=TwoWay}">
             </ActivityIndicator>
-            <Button 
-                Command="{Binding ConvertCommand}"
-                BackgroundColor="#FFBD62"
-                BorderRadius="25"
-                FontAttributes="Bold"
-                HeightRequest="50"
-                IsEnabled="{Binding IsEnabled, Mode=TwoWay}"
-                Text="Convert"
-                TextColor="White">
-            </Button>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button 
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Command="{Binding ConvertCommand}"
+                    BackgroundColor="DarkGray"
+                    BorderRadius="25"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    IsEnabled="{Binding ConvIsEnabled, Mode=TwoWay}"
+                    Text="Convert"
+                    TextColor="White">
+                </Button>
+                <Button 
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Command="{Binding CleanCommand}"
+                    BackgroundColor="DarkGray"
+                    BorderRadius="25"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    IsEnabled="{Binding CleanIsEnabled, Mode=TwoWay}"
+                    Text="Clean"
+                    TextColor="White">
+                </Button>
+
+            </Grid>
+            
             <Label
-                BackgroundColor="#FFBD62"
+                BackgroundColor="DarkGray"
                 FontSize="Large"
                 HorizontalTextAlignment="Center"
                 Margin="5"

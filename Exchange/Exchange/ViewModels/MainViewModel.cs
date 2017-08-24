@@ -19,17 +19,31 @@
         #endregion
 
         #region Attributes
-        bool _isEnabled;
+        bool _convIsEnabled;
+        bool _cleanIsEnabled;
         bool _isRunning;
+        string _amount;
         string _result;
+        Rate _sourceRate;
+        Rate _targetRate;
         ObservableCollection<Rate> _rates;
         #endregion
 
         #region Properties
         public string Amount
         {
-            get;
-            set;
+            get
+            {
+                return _amount;
+            }
+            set
+            {
+                if (_amount != value)
+                {
+                    _amount = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Amount)));
+                }
+            }
         }
         public ObservableCollection<Rate> Rates
         {
@@ -48,13 +62,31 @@
         }
         public Rate SourceRate
         {
-            get;
-            set;
+            get {
+                return _sourceRate;
+            }
+            set {
+                if (_sourceRate != value)
+                {
+                    _sourceRate = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SourceRate)));
+                }
+            }
         }
         public Rate TargetRate
         {
-            get;
-            set;
+            get {
+                return _targetRate;
+            }
+            set
+            {
+
+                if (_targetRate != value)
+                {
+                    _targetRate = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetRate)));
+                }
+            }
         }
         public bool IsRunning
         {
@@ -71,18 +103,33 @@
                 }
             }
         }
-        public bool IsEnabled
+        public bool ConvIsEnabled
         {
             get
             {
-                return _isEnabled;
+                return _convIsEnabled;
             }
             set
             {
-                if (_isEnabled != value)
+                if (_convIsEnabled != value)
                 {
-                    _isEnabled = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsEnabled)));
+                    _convIsEnabled = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ConvIsEnabled)));
+                }
+            }
+        }
+        public bool CleanIsEnabled
+        {
+            get
+            {
+                return _cleanIsEnabled;
+            }
+            set
+            {
+                if (_cleanIsEnabled != value)
+                {
+                    _cleanIsEnabled = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CleanIsEnabled)));
                 }
             }
         }
@@ -148,6 +195,40 @@
                 SourceRate.Name,
                 amountConverted,
                 TargetRate.Name);
+                CleanIsEnabled = true;
+        }
+
+        public ICommand SwitchCommand
+        {
+            get
+            {
+                return new RelayCommand(_Switch);
+            }
+        }
+
+        private void _Switch()
+        {
+            var aux = SourceRate;
+            SourceRate = TargetRate;
+            TargetRate = aux;
+            Convert();
+        }
+
+        public ICommand CleanCommand
+        {
+            get
+            {
+                return new RelayCommand(Clean);
+            }
+        }
+
+        private void Clean()
+        {
+            Result = "Ready to convert!";
+            SourceRate = null;
+            TargetRate = null;
+            Amount = null;
+            CleanIsEnabled = false;
         }
         #endregion
 
@@ -178,7 +259,7 @@
 
                 var rates = JsonConvert.DeserializeObject<List<Rate>>(result);
                 Rates = new ObservableCollection<Rate>(rates);
-                IsEnabled = true;
+                ConvIsEnabled = true;
                 IsRunning = false;
                 Result = "Ready to convert!";
             }
